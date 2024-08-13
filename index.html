@@ -14,17 +14,18 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            color: #333;
+            color: #ffffff; /* Cor do texto padrão da página */
         }
 
         h1 {
             text-align: center;
-            color: #ffffff;
+            color: #ffffff; /* Cor do título */
         }
 
         label {
             display: block;
             margin: 10px 0 5px;
+            color: #ffffff; /* Cor das labels */
         }
 
         input[type="text"], input[type="date"] {
@@ -33,6 +34,8 @@
             margin: 5px 0 20px;
             border: 1px solid #ddd;
             border-radius: 4px;
+            background-color: rgba(255, 255, 255, 0.8); /* Fundo branco semi-transparente */
+            color: #333; /* Cor do texto dentro dos campos de entrada */
         }
 
         button {
@@ -56,8 +59,8 @@
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
-            background-color: rgba(255, 255, 255, 0.8);
-            color: #333;
+            background-color: rgba(157, 42, 125, 0.8); /* Cor de fundo semi-transparente para a área de resultado */
+            color: #ffffff; /* Cor do texto dentro da área de resultado */
         }
 
         .result p {
@@ -65,15 +68,15 @@
         }
 
         .fatura-section {
-            border: 1px solid #ddd;
+            border: none; /* Remover borda */
             border-radius: 4px;
             padding: 10px;
             margin-bottom: 20px;
-            background-color: rgba(255, 255, 255, 0.8);
         }
 
         .fatura-section h2 {
             margin-top: 0;
+            color: #d13a21; /* Cor do título das seções de fatura */
         }
     </style>
 </head>
@@ -115,7 +118,7 @@
         <button type="button" onclick="calcularJuros()">Calcular Juros</button>
     </form>
 
-    <div class="result" id="resultado">
+    <div class="result" id="resultado" style="display:none;">
         <h2>Resultado</h2>
         <div id="resultados"></div>
     </div>
