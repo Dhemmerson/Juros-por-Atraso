@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Juros por Atraso</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            max-width: 800px;
+            margin: auto;
+            background-image: url('https://i.postimg.cc/13pMmQJk/Calculadora-1.png'); /* Troque essa URL pela imagem que quiser */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #ffffff; /* Cor do texto padrão da página */
+        }
+
+        h1 {
+            text-align: center;
+            color: #ffffff; /* Cor do título */
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #ffffff; /* Cor das labels */
+        }
+
+        input[type="text"], input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: rgba(255, 255, 255, 0.8); /* Fundo branco semi-transparente */
+            color: #333; /* Cor do texto dentro dos campos de entrada */
+        }
+
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #d13a21;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+        }
+
+        button:hover {
+            background-color: #9d2a7d;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: rgba(248, 104, 1, 0.8); /* Cor de fundo semi-transparente para a área de resultado */
+            color: #ffffff; /* Cor do texto dentro da área de resultado */
+        }
+
+        .result p {
+            margin: 5px 0;
+        }
+
+        .fatura-section {
+            border: none; /* Remover borda */
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .fatura-section h2 {
+            margin-top: 0;
+            color: #d13a21; /* Cor do título das seções de fatura */
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculadora de Juros por Atraso</h1>
+    <form id="calcForm">
+        <div class="fatura-section">
+            <h2>Fatura 1</h2>
+            <label for="vencimento1">Data de Vencimento:</label>
+            <input type="date" id="vencimento1" required>
+            <label for="valorOriginal1">Valor Original (R$):</label>
+            <input type="text" id="valorOriginal1" required>
+        </div>
+
+        <div class="fatura-section">
+            <h2>Fatura 2</h2>
+            <label for="vencimento2">Data de Vencimento:</label>
+            <input type="date" id="vencimento2">
+            <label for="valorOriginal2">Valor Original (R$):</label>
+            <input type="text" id="valorOriginal2">
+        </div>
+
+        <div class="fatura-section">
+            <h2>Fatura 3</h2>
+            <label for="vencimento3">Data de Vencimento:</label>
+            <input type="date" id="vencimento3">
+            <label for="valorOriginal3">Valor Original (R$):</label>
+            <input type="text" id="valorOriginal3">
+        </div>
+
+        <div class="fatura-section">
+            <h2>Fatura 4</h2>
+            <label for="vencimento4">Data de Vencimento:</label>
+            <input type="date" id="vencimento4">
+            <label for="valorOriginal4">Valor Original (R$):</label>
+            <input type="text" id="valorOriginal4">
+        </div>
+
+        <button type="button" onclick="calcularJuros()">Calcular Juros</button>
+    </form>
+
+    <div class="result" id="resultado" style="display:none;">
+        <h2>Resultado</h2>
+        <div id="resultados"></div>
+    </div>
+
+    <script>
+        function calcularJuros() {
+            const jurosPorDia = 0.0033; // 0.33% ao dia
+            const multa = 0.02; // 2%
+            let resultadosHtml = '';
+            let algumaFaturaValida = false;
+
+            for (let i = 1; i <= 4; i++) {
+                const vencimento = document.getElementById('vencimento' + i).value;
+                const valorOriginalStr = document.getElementById('valorOriginal' + i).value.replace(',', '.');
+                const valorOriginal = parseFloat(valorOriginalStr);
+
+                if (!vencimento || isNaN(valorOriginal)) {
+                    continue; // Ignora faturas sem dados válidos
+                }
+
+                const dataVencimento = new Date(vencimento);
+                const dataHoje = new Date();
+                const diasAtraso = Math.max(0, Math.ceil((dataHoje - dataVencimento) / (1000 * 60 * 60 * 24)));
+
+                // Cálculo de juros compostos
+                const jurosAcumulado = valorOriginal * (Math.pow((1 + jurosPorDia), diasAtraso) - 1);
+                const valorMulta = valorOriginal * multa;
+                const valorTotal = valorOriginal + jurosAcumulado + valorMulta;
+
+                algumaFaturaValida = true;
+
+                resultadosHtml += `
+                    <div class="resultado">
+                        <h3>Fatura ${i}</h3>
+                        <p><strong>Valor Original:</strong> R$ ${valorOriginal.toFixed(2).replace('.', ',')}</p>
+                        <p><strong>Dias de Atraso:</strong> ${diasAtraso} dia(s)</p>
+                        <p><strong>Juros ao Dia:</strong> R$ ${(valorOriginal * jurosPorDia).toFixed(2).replace('.', ',')}</p>
+                        <p><strong>Juros Acumulado:</strong> R$ ${jurosAcumulado.toFixed(2).replace('.', ',')}</p>
+                        <p><strong>Multa:</strong> R$ ${valorMulta.toFixed(2).replace('.', ',')}</p>
+                        <p><strong>Valor Total:</strong> R$ ${valorTotal.toFixed(2).replace('.', ',')}</p>
+                    </div>
+                `;
+            }
+
+            if (algumaFaturaValida) {
+                document.getElementById('resultados').innerHTML = resultadosHtml;
+                document.getElementById('resultado').style.display = 'block';
+            } else {
+                document.getElementById('resultado').style.display = 'none';
+                alert("Por favor, preencha pelo menos uma fatura corretamente.");
+            }
+        }
+    </script>
+</body>
+</html>
