@@ -5,78 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Juros por Atraso</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            max-width: 800px;
-            margin: auto;
-            background-image: url('https://i.postimg.cc/13pMmQJk/Calculadora-1.png'); /* Troque essa URL pela imagem que quiser */
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            color: #ffffff; /* Cor do texto padrão da página */
-        }
-
-        h1 {
-            text-align: center;
-            color: #ffffff; /* Cor do título */
-        }
-
-        label {
-            display: block;
-            margin: 10px 0 5px;
-            color: #ffffff; /* Cor das labels */
-        }
-
-        input[type="text"], input[type="date"] {
-            width: 100%;
-            padding: 8px;
-            margin: 5px 0 20px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background-color: rgba(255, 255, 255, 0.8); /* Fundo branco semi-transparente */
-            color: #333; /* Cor do texto dentro dos campos de entrada */
-        }
-
         button {
-            padding: 10px 15px;
-            font-size: 16px;
-            color: #fff;
-            background-color: #d13a21;
-            border: none;
-            border-radius: 4px;
             cursor: pointer;
             display: block;
             margin: 20px auto;
         }
-
         button:hover {
             background-color: #9d2a7d;
         }
-
         .result {
             margin-top: 20px;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
-            background-color: rgba(248, 104, 1, 0.8); /* Cor de fundo semi-transparente para a área de resultado */
-            color: #ffffff; /* Cor do texto dentro da área de resultado */
+            background-color: rgba(248, 104, 1, 0.8);
+            color: #ffffff;
         }
-
         .result p {
             margin: 5px 0;
         }
-
         .fatura-section {
-            border: none; /* Remover borda */
+            border: none;
             border-radius: 4px;
             padding: 10px;
             margin-bottom: 20px;
         }
-
         .fatura-section h2 {
             margin-top: 0;
-            color: #d13a21; /* Cor do título das seções de fatura */
+            color: #d13a21;
         }
     </style>
 </head>
@@ -90,30 +46,7 @@
             <label for="valorOriginal1">Valor Original (R$):</label>
             <input type="text" id="valorOriginal1" required>
         </div>
-
-        <div class="fatura-section">
-            <h2>Fatura 2</h2>
-            <label for="vencimento2">Data de Vencimento:</label>
-            <input type="date" id="vencimento2">
-            <label for="valorOriginal2">Valor Original (R$):</label>
-            <input type="text" id="valorOriginal2">
-        </div>
-
-        <div class="fatura-section">
-            <h2>Fatura 3</h2>
-            <label for="vencimento3">Data de Vencimento:</label>
-            <input type="date" id="vencimento3">
-            <label for="valorOriginal3">Valor Original (R$):</label>
-            <input type="text" id="valorOriginal3">
-        </div>
-
-        <div class="fatura-section">
-            <h2>Fatura 4</h2>
-            <label for="vencimento4">Data de Vencimento:</label>
-            <input type="date" id="vencimento4">
-            <label for="valorOriginal4">Valor Original (R$):</label>
-            <input type="text" id="valorOriginal4">
-        </div>
+        <!-- Repetir outras faturas como acima -->
 
         <button type="button" onclick="calcularJuros()">Calcular Juros</button>
     </form>
@@ -135,15 +68,12 @@
                 const valorOriginalStr = document.getElementById('valorOriginal' + i).value.replace(',', '.');
                 const valorOriginal = parseFloat(valorOriginalStr);
 
-                if (!vencimento || isNaN(valorOriginal)) {
-                    continue; // Ignora faturas sem dados válidos
-                }
+                if (!vencimento || isNaN(valorOriginal)) continue;
 
                 const dataVencimento = new Date(vencimento);
                 const dataHoje = new Date();
                 const diasAtraso = Math.max(0, Math.ceil((dataHoje - dataVencimento) / (1000 * 60 * 60 * 24)));
 
-                // Cálculo de juros compostos
                 const jurosAcumulado = valorOriginal * (Math.pow((1 + jurosPorDia), diasAtraso) - 1);
                 const valorMulta = valorOriginal * multa;
                 const valorTotal = valorOriginal + jurosAcumulado + valorMulta;
@@ -151,7 +81,7 @@
                 algumaFaturaValida = true;
 
                 resultadosHtml += `
-                    <div class="resultado">
+                    <div class="result">
                         <h3>Fatura ${i}</h3>
                         <p><strong>Valor Original:</strong> R$ ${valorOriginal.toFixed(2).replace('.', ',')}</p>
                         <p><strong>Dias de Atraso:</strong> ${diasAtraso} dia(s)</p>
