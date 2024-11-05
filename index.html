@@ -5,102 +5,93 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Juros por Atraso</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://i.postimg.cc/fRKXV1DZ/Calculadora-1.png'); /* Substitua pelo seu URL de imagem */
+            background-size: cover;
+            color: white;
+            text-align: center;
+            padding: 50px;
+        }
+        input {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
         button {
+            padding: 10px 20px;
+            font-size: 16px;
             cursor: pointer;
-            display: block;
-            margin: 20px auto;
+            background-color: #ff7f50; /* Cor de fundo do botão */
+            border: none;
+            border-radius: 5px;
+            color: white;
         }
         button:hover {
-            background-color: #9d2a7d;
+            background-color: #ff6347; /* Cor do botão ao passar o mouse */
         }
-        .result {
+        h2 {
             margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background-color: rgba(248, 104, 1, 0.8);
-            color: #ffffff;
-        }
-        .result p {
-            margin: 5px 0;
-        }
-        .fatura-section {
-            border: none;
-            border-radius: 4px;
-            padding: 10px;
-            margin-bottom: 20px;
-        }
-        .fatura-section h2 {
-            margin-top: 0;
-            color: #d13a21;
         }
     </style>
 </head>
 <body>
     <h1>Calculadora de Juros por Atraso</h1>
-    <form id="calcForm">
-        <div class="fatura-section">
-            <h2>Fatura 1</h2>
-            <label for="vencimento1">Data de Vencimento:</label>
-            <input type="date" id="vencimento1" required>
-            <label for="valorOriginal1">Valor Original (R$):</label>
-            <input type="text" id="valorOriginal1" required>
-        </div>
-        <!-- Repetir outras faturas como acima -->
 
-        <button type="button" onclick="calcularJuros()">Calcular Juros</button>
-    </form>
+    <div id="faturas">
+        <h3>Fatura 1</h3>
+        <label for="valorFatura1">Valor (R$):</label>
+        <input type="number" id="valorFatura1" step="0.01" required>
+        <label for="diasAtraso1">Dias de Atraso:</label>
+        <input type="number" id="diasAtraso1" required>
 
-    <div class="result" id="resultado" style="display:none;">
-        <h2>Resultado</h2>
-        <div id="resultados"></div>
+        <h3>Fatura 2</h3>
+        <label for="valorFatura2">Valor (R$):</label>
+        <input type="number" id="valorFatura2" step="0.01" required>
+        <label for="diasAtraso2">Dias de Atraso:</label>
+        <input type="number" id="diasAtraso2" required>
+
+        <h3>Fatura 3</h3>
+        <label for="valorFatura3">Valor (R$):</label>
+        <input type="number" id="valorFatura3" step="0.01" required>
+        <label for="diasAtraso3">Dias de Atraso:</label>
+        <input type="number" id="diasAtraso3" required>
+
+        <h3>Fatura 4</h3>
+        <label for="valorFatura4">Valor (R$):</label>
+        <input type="number" id="valorFatura4" step="0.01" required>
+        <label for="diasAtraso4">Dias de Atraso:</label>
+        <input type="number" id="diasAtraso4" required>
     </div>
+
+    <button onclick="calcularJuros()">Calcular</button>
+
+    <h2>Resultado:</h2>
+    <p id="resultado"></p>
 
     <script>
         function calcularJuros() {
-            const jurosPorDia = 0.0033; // 0.33% ao dia
-            const multa = 0.02; // 2%
-            let resultadosHtml = '';
-            let algumaFaturaValida = false;
+            const taxaJuros = 0.0033; // 0,33% ao dia
+            const multaFixa = 0.01; // 1% de multa
+            let totalJuros = 0;
 
             for (let i = 1; i <= 4; i++) {
-                const vencimento = document.getElementById('vencimento' + i).value;
-                const valorOriginalStr = document.getElementById('valorOriginal' + i).value.replace(',', '.');
-                const valorOriginal = parseFloat(valorOriginalStr);
+                const valorFatura = parseFloat(document.getElementById(`valorFatura${i}`).value);
+                const diasAtraso = parseInt(document.getElementById(`diasAtraso${i}`).value);
 
-                if (!vencimento || isNaN(valorOriginal)) continue;
+                if (isNaN(valorFatura) || isNaN(diasAtraso) || valorFatura <= 0 || diasAtraso < 0) {
+                    document.getElementById("resultado").textContent = "Insira valores válidos para todas as faturas.";
+                    return;
+                }
 
-                const dataVencimento = new Date(vencimento);
-                const dataHoje = new Date();
-                const diasAtraso = Math.max(0, Math.ceil((dataHoje - dataVencimento) / (1000 * 60 * 60 * 24)));
-
-                const jurosAcumulado = valorOriginal * (Math.pow((1 + jurosPorDia), diasAtraso) - 1);
-                const valorMulta = valorOriginal * multa;
-                const valorTotal = valorOriginal + jurosAcumulado + valorMulta;
-
-                algumaFaturaValida = true;
-
-                resultadosHtml += `
-                    <div class="result">
-                        <h3>Fatura ${i}</h3>
-                        <p><strong>Valor Original:</strong> R$ ${valorOriginal.toFixed(2).replace('.', ',')}</p>
-                        <p><strong>Dias de Atraso:</strong> ${diasAtraso} dia(s)</p>
-                        <p><strong>Juros ao Dia:</strong> R$ ${(valorOriginal * jurosPorDia).toFixed(2).replace('.', ',')}</p>
-                        <p><strong>Juros Acumulado:</strong> R$ ${jurosAcumulado.toFixed(2).replace('.', ',')}</p>
-                        <p><strong>Multa:</strong> R$ ${valorMulta.toFixed(2).replace('.', ',')}</p>
-                        <p><strong>Valor Total:</strong> R$ ${valorTotal.toFixed(2).replace('.', ',')}</p>
-                    </div>
-                `;
+                // Calcular multa e valor com juros
+                const valorComMulta = valorFatura + (valorFatura * multaFixa);
+                const valorFinal = valorComMulta * Math.pow(1 + taxaJuros, diasAtraso);
+                totalJuros += valorFinal;
             }
 
-            if (algumaFaturaValida) {
-                document.getElementById('resultados').innerHTML = resultadosHtml;
-                document.getElementById('resultado').style.display = 'block';
-            } else {
-                document.getElementById('resultado').style.display = 'none';
-                alert("Por favor, preencha pelo menos uma fatura corretamente.");
-            }
+            document.getElementById("resultado").textContent = `Valor Total com Juros e Multa: R$ ${totalJuros.toFixed(2)}`;
         }
     </script>
 </body>
-<html></html>
+</html>
