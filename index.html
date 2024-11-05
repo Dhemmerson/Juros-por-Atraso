@@ -13,10 +13,23 @@
             text-align: center;
             padding: 50px;
         }
+        h1 {
+            margin-bottom: 30px;
+            font-size: 36px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+        .fatura {
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px 0;
+        }
         input {
             margin: 10px;
             padding: 10px;
             font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
         }
         button {
             padding: 10px 20px;
@@ -26,12 +39,18 @@
             border: none;
             border-radius: 5px;
             color: white;
+            transition: background-color 0.3s;
         }
         button:hover {
             background-color: #ff6347; /* Cor do botão ao passar o mouse */
         }
         h2 {
             margin-top: 20px;
+            font-size: 24px;
+        }
+        #resultado {
+            font-size: 20px;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -39,29 +58,37 @@
     <h1>Calculadora de Juros por Atraso</h1>
 
     <div id="faturas">
-        <h3>Fatura 1</h3>
-        <label for="valorFatura1">Valor (R$):</label>
-        <input type="number" id="valorFatura1" step="0.01" required>
-        <label for="dataVencimento1">Data de Vencimento:</label>
-        <input type="date" id="dataVencimento1" required>
+        <div class="fatura">
+            <h3>Fatura 1</h3>
+            <label for="valorFatura1">Valor (R$):</label>
+            <input type="number" id="valorFatura1" step="0.01" placeholder="0.00">
+            <label for="dataVencimento1">Data de Vencimento:</label>
+            <input type="date" id="dataVencimento1">
+        </div>
 
-        <h3>Fatura 2</h3>
-        <label for="valorFatura2">Valor (R$):</label>
-        <input type="number" id="valorFatura2" step="0.01" required>
-        <label for="dataVencimento2">Data de Vencimento:</label>
-        <input type="date" id="dataVencimento2" required>
+        <div class="fatura">
+            <h3>Fatura 2</h3>
+            <label for="valorFatura2">Valor (R$):</label>
+            <input type="number" id="valorFatura2" step="0.01" placeholder="0.00">
+            <label for="dataVencimento2">Data de Vencimento:</label>
+            <input type="date" id="dataVencimento2">
+        </div>
 
-        <h3>Fatura 3</h3>
-        <label for="valorFatura3">Valor (R$):</label>
-        <input type="number" id="valorFatura3" step="0.01" required>
-        <label for="dataVencimento3">Data de Vencimento:</label>
-        <input type="date" id="dataVencimento3" required>
+        <div class="fatura">
+            <h3>Fatura 3</h3>
+            <label for="valorFatura3">Valor (R$):</label>
+            <input type="number" id="valorFatura3" step="0.01" placeholder="0.00">
+            <label for="dataVencimento3">Data de Vencimento:</label>
+            <input type="date" id="dataVencimento3">
+        </div>
 
-        <h3>Fatura 4</h3>
-        <label for="valorFatura4">Valor (R$):</label>
-        <input type="number" id="valorFatura4" step="0.01" required>
-        <label for="dataVencimento4">Data de Vencimento:</label>
-        <input type="date" id="dataVencimento4" required>
+        <div class="fatura">
+            <h3>Fatura 4</h3>
+            <label for="valorFatura4">Valor (R$):</label>
+            <input type="number" id="valorFatura4" step="0.01" placeholder="0.00">
+            <label for="dataVencimento4">Data de Vencimento:</label>
+            <input type="date" id="dataVencimento4">
+        </div>
     </div>
 
     <button onclick="calcularJuros()">Calcular</button>
@@ -74,28 +101,30 @@
             const taxaJuros = 0.0033; // 0,33% ao dia
             const multaFixa = 0.01; // 1% de multa
             let totalJuros = 0;
+            let faturasValidas = 0;
 
             for (let i = 1; i <= 4; i++) {
                 const valorFatura = parseFloat(document.getElementById(`valorFatura${i}`).value);
                 const dataVencimento = new Date(document.getElementById(`dataVencimento${i}`).value);
 
-                if (isNaN(valorFatura) || valorFatura <= 0 || isNaN(dataVencimento.getTime())) {
-                    document.getElementById("resultado").textContent = "Insira valores válidos para todas as faturas.";
-                    return;
-                }
+                if (!isNaN(valorFatura) && valorFatura > 0 && !isNaN(dataVencimento.getTime())) {
+                    faturasValidas++;
+                    const hoje = new Date();
+                    const diasAtraso = Math.max(0, Math.ceil((hoje - dataVencimento) / (1000 * 60 * 60 * 24))); // Calcula os dias de atraso
 
-                const hoje = new Date();
-                const diasAtraso = Math.max(0, Math.ceil((hoje - dataVencimento) / (1000 * 60 * 60 * 24))); // Calcula os dias de atraso
-               
-                // Calcular multa e valor com juros
-                const valorComMulta = valorFatura + (valorFatura * multaFixa);
-                const valorFinal = valorComMulta * Math.pow(1 + taxaJuros, diasAtraso);
-                totalJuros += valorFinal;
+                    // Calcular multa e valor com juros
+                    const valorComMulta = valorFatura + (valorFatura * multaFixa);
+                    const valorFinal = valorComMulta * Math.pow(1 + taxaJuros, diasAtraso);
+                    totalJuros += valorFinal;
+                }
             }
 
-            document.getElementById("resultado").textContent = `Valor Total com Juros e Multa: R$ ${totalJuros.toFixed(2)}`;
+            if (faturasValidas > 0) {
+                document.getElementById("resultado").textContent = `Valor Total com Juros e Multa: R$ ${totalJuros.toFixed(2)}`;
+            } else {
+                document.getElementById("resultado").textContent = "Insira valores válidos para as faturas.";
+            }
         }
     </script>
 </body>
 </html>
-
