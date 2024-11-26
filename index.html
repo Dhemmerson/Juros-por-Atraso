@@ -3,54 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Juros por Atraso</title>
+    <title>Calculadora de Multa Contratual</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-image: url('https://i.postimg.cc/fRKXV1DZ/Calculadora-1.png'); /* Substitua pelo seu URL de imagem */
-            background-size: cover;
-            color: white;
-            text-align: center;
-            padding: 50px;
+            margin: 20px;
+            max-width: 600px;
+            margin: auto;
+            background-image: url('https://i.postimg.cc/13pMmQJk/Calculadora-1.png'); /* Caminho para a imagem de fundo */
+            background-size: cover; /* Faz a imagem cobrir toda a área do fundo */
+            background-position: center; /* Centraliza a imagem de fundo */
+            background-repeat: no-repeat; /* Evita que a imagem se repita */
+            color: #ffffff; /* Cor do texto padrão da página */
         }
         h1 {
-            margin-bottom: 30px;
-            font-size: 36px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            color: #ffffff; /* Cor do título */
         }
-        .fatura {
-            background-color: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
-            padding: 20px;
-            margin: 10px 0;
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #ffffff; /* Cor das labels */
         }
-        input {
-            margin: 10px;
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
+        input[type="text"], input[type="date"], select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: rgba(255, 255, 255, 0.8); /* Adiciona um fundo branco semi-transparente para melhorar a legibilidade */
+            color: #333; /* Cor do texto dentro dos campos de entrada */
         }
         button {
-            padding: 10px 20px;
+            padding: 10px 15px;
             font-size: 16px;
-            cursor: pointer;
-            background-color: #ff7f50; /* Cor de fundo do botão */
+            color: #fff;
+            background-color: #d13a21;
             border: none;
-            border-radius: 5px;
-            color: white;
-            transition: background-color 0.3s;
+            border-radius: 4px;
+            cursor: pointer;
         }
         button:hover {
-            background-color: #ff6347; /* Cor do botão ao passar o mouse */
+            background-color: #9d2a7d;
         }
-        h2 {
+        .result {
             margin-top: 20px;
-            font-size: 24px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: rgba(248, 104, 1, 0.8); /* Cor de fundo semi-transparente para a área de resultado */
+            color: #fff; /* Cor do texto dentro da área de resultado */
         }
-        #resultado {
-            font-size: 20px;
-            font-weight: bold;
+        .result p {
+            margin: 5px 0;
         }
     </style>
 </head>
