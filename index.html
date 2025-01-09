@@ -98,8 +98,8 @@
 
     <button onclick="calcularJuros()">Calcular</button>
 
-    <h2>Resultado:</h2>
-    <p id="resultado"></p>
+    <h2>Resultados:</h2>
+    <div id="resultado"></div>
 
     <script>
         function formatarParaReal(valor) {
@@ -113,8 +113,7 @@
         function calcularJuros() {
             const taxaJuros = 0.0033; // 0,33% ao dia
             const multaFixa = 0.01; // 1% de multa
-            let totalJuros = 0;
-            let faturasValidas = 0;
+            let resultados = "";
 
             for (let i = 1; i <= 4; i++) {
                 const valorFaturaTexto = document.getElementById(`valorFatura${i}`).value;
@@ -122,18 +121,18 @@
 
                 if (valorFaturaTexto && dataVencimento) {
                     const valorFatura = parseReal(valorFaturaTexto);
-                    faturasValidas++;
                     const hoje = new Date();
                     const diasAtraso = Math.max(0, Math.ceil((hoje - dataVencimento) / (1000 * 60 * 60 * 24))); // Dias de atraso
 
                     const valorComMulta = valorFatura + (valorFatura * multaFixa);
                     const valorFinal = valorComMulta * Math.pow(1 + taxaJuros, diasAtraso);
-                    totalJuros += valorFinal;
+
+                    resultados += `<p>Fatura ${i}: Valor Original ${formatarParaReal(valorFatura)}, Juros e Multa ${formatarParaReal(valorFinal)}</p>`;
                 }
             }
 
-            if (faturasValidas > 0) {
-                document.getElementById("resultado").textContent = `Valor Total com Juros e Multa: ${formatarParaReal(totalJuros)}`;
+            if (resultados) {
+                document.getElementById("resultado").innerHTML = resultados;
             } else {
                 document.getElementById("resultado").textContent = "Insira valores válidos para as faturas.";
             }
