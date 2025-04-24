@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Calculadora de Juros e Multa</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     * {
       box-sizing: border-box;
@@ -13,21 +12,21 @@
 
     body {
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(166, 61, 228, 0.8)),
-                  url('https://i.postimg.cc/dQjnfVdS/Design-sem-nome-17.png') no-repeat center center fixed;
-      background-size: cover;
+      background: linear-gradient(135deg, #8436f2, #b153ff);
       margin: 0;
       padding: 2rem;
-      color: #fff;
+      color: #ffffff;
     }
 
     .container {
-      max-width: 700px;
+      max-width: 750px;
       margin: auto;
-      background: rgba(254, 135, 13, 0.95);
-      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
       padding: 2rem;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(8px);
     }
 
     h1, h2 {
@@ -37,11 +36,11 @@
     }
 
     .fatura {
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       padding: 1rem;
       background: rgba(255,255,255,0.05);
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.15);
     }
 
     h3 {
@@ -55,24 +54,12 @@
       font-size: 0.95rem;
     }
 
-    .input-icon {
-      position: relative;
-      margin-bottom: 1rem;
-    }
-
-    .input-icon i {
-      position: absolute;
-      top: 50%;
-      left: 12px;
-      transform: translateY(-50%);
-      color: #888;
-    }
-
-    .input-icon input {
+    input[type="text"], input[type="date"] {
       width: 100%;
-      padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       background-color: rgba(255, 255, 255, 0.9);
       color: #333;
       font-size: 1rem;
@@ -83,24 +70,25 @@
       width: 100%;
       padding: 1rem;
       font-size: 1.1rem;
-      background: linear-gradient(to right, #fe7701, #a43edb);
+      background: #fe7f2d;
       color: white;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       cursor: pointer;
-      transition: 0.3s;
+      transition: background 0.3s;
+      font-weight: bold;
     }
 
     button:hover {
-      opacity: 0.9;
+      background: #f96300;
     }
 
     .result {
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(255, 255, 255, 0.1);
       padding: 1rem;
       margin-top: 1.5rem;
       border-radius: 12px;
-      border-left: 5px solid #ff6600;
+      border-left: 5px solid #fe7f2d;
     }
 
     .result h3 {
@@ -117,72 +105,40 @@
     <h1>Calculadora de Juros por Atraso</h1>
 
     <div id="faturas">
-      <!-- Fatura 1 -->
       <div class="fatura">
         <h3>Fatura 1</h3>
         <label for="valorFatura1">Valor (R$):</label>
-        <div class="input-icon">
-          <i class="fa-solid fa-dollar-sign"></i>
-          <input type="text" id="valorFatura1" placeholder="0,00" oninput="formatarValor(this)">
-        </div>
-
+        <input type="text" id="valorFatura1" placeholder="0,00" oninput="formatarValor(this)">
         <label for="dataVencimento1">Data de Vencimento:</label>
-        <div class="input-icon">
-          <i class="fa-solid fa-calendar-days"></i>
-          <input type="date" id="dataVencimento1">
-        </div>
+        <input type="date" id="dataVencimento1">
       </div>
 
-      <!-- Fatura 2 -->
       <div class="fatura">
         <h3>Fatura 2</h3>
         <label for="valorFatura2">Valor (R$):</label>
-        <div class="input-icon">
-          <i class="fa-solid fa-dollar-sign"></i>
-          <input type="text" id="valorFatura2" placeholder="0,00" oninput="formatarValor(this)">
-        </div>
-
+        <input type="text" id="valorFatura2" placeholder="0,00" oninput="formatarValor(this)">
         <label for="dataVencimento2">Data de Vencimento:</label>
-        <div class="input-icon">
-          <i class="fa-solid fa-calendar-days"></i>
-          <input type="date" id="dataVencimento2">
-        </div>
+        <input type="date" id="dataVencimento2">
       </div>
 
-      <!-- Fatura 3 -->
       <div class="fatura">
         <h3>Fatura 3</h3>
         <label for="valorFatura3">Valor (R$):</label>
-        <div class="input-icon">
-          <i class="fa-solid fa-dollar-sign"></i>
-          <input type="text" id="valorFatura3" placeholder="0,00" oninput="formatarValor(this)">
-        </div>
-
+        <input type="text" id="valorFatura3" placeholder="0,00" oninput="formatarValor(this)">
         <label for="dataVencimento3">Data de Vencimento:</label>
-        <div class="input-icon">
-          <i class="fa-solid fa-calendar-days"></i>
-          <input type="date" id="dataVencimento3">
-        </div>
+        <input type="date" id="dataVencimento3">
       </div>
 
-      <!-- Fatura 4 -->
       <div class="fatura">
         <h3>Fatura 4</h3>
         <label for="valorFatura4">Valor (R$):</label>
-        <div class="input-icon">
-          <i class="fa-solid fa-dollar-sign"></i>
-          <input type="text" id="valorFatura4" placeholder="0,00" oninput="formatarValor(this)">
-        </div>
-
+        <input type="text" id="valorFatura4" placeholder="0,00" oninput="formatarValor(this)">
         <label for="dataVencimento4">Data de Vencimento:</label>
-        <div class="input-icon">
-          <i class="fa-solid fa-calendar-days"></i>
-          <input type="date" id="dataVencimento4">
-        </div>
+        <input type="date" id="dataVencimento4">
       </div>
     </div>
 
-    <button onclick="calcularJuros()">Calcular Juros</button>
+    <button onclick="calcularJuros()">Calcular</button>
 
     <h2>Resultados:</h2>
     <div id="resultado"></div>
@@ -210,8 +166,7 @@
       let resultados = "";
 
       for (let i = 1; i <= 4; i++) {
-        const valor = document.getElementById(`valorFatura${i}`).value;
-        const valorFatura = parseFloat(valor.replace(/\./g, '').replace(',', '.'));
+        const valorFatura = parseFloat(document.getElementById(`valorFatura${i}`).value.replace(/\./g, '').replace(',', '.'));
         const dataVencimento = new Date(document.getElementById(`dataVencimento${i}`).value);
 
         if (!isNaN(valorFatura) && dataVencimento) {
