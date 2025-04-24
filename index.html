@@ -12,118 +12,135 @@
 
     body {
       font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #8436f2, #b153ff);
       margin: 0;
       padding: 2rem;
-      background: linear-gradient(to right, #7e22ce, #f97316);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      color: #ffffff;
     }
 
     .container {
-      background: #fff;
-      color: #333;
-      width: 100%;
-      max-width: 720px;
-      padding: 2rem;
+      max-width: 750px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      padding: 2rem;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(8px);
     }
 
-    h1 {
+    h1, h2 {
       text-align: center;
-      color: #7e22ce;
+      margin-bottom: 1rem;
       font-weight: 600;
-      margin-bottom: 1.5rem;
     }
 
     .fatura {
-      background: #f3f4f6;
-      padding: 1rem;
-      border-radius: 16px;
       margin-bottom: 1.5rem;
-      border-left: 5px solid #7e22ce;
+      padding: 1rem;
+      background: rgba(255,255,255,0.05);
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.15);
     }
 
     h3 {
       margin-top: 0;
       font-weight: 600;
-      color: #f97316;
     }
 
     label {
+      display: block;
+      margin-bottom: 0.3rem;
       font-size: 0.95rem;
-      font-weight: 500;
     }
 
-    input[type="text"],
-    input[type="date"] {
+    input[type="text"], input[type="date"] {
       width: 100%;
       padding: 0.75rem;
-      margin: 0.3rem 0 1rem;
+      margin-bottom: 1rem;
+      border: none;
+      border-radius: 10px;
+      background-color: rgba(255, 255, 255, 0.9);
+      color: #333;
       font-size: 1rem;
-      border: 1px solid #d1d5db;
-      border-radius: 12px;
-      background-color: #fff;
     }
 
     button {
+      display: block;
       width: 100%;
       padding: 1rem;
-      background-color: #7e22ce;
-      color: #fff;
       font-size: 1.1rem;
+      background: #fe7f2d;
+      color: white;
       border: none;
       border-radius: 12px;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: background 0.3s;
+      font-weight: bold;
     }
 
     button:hover {
-      background-color: #6b21a8;
-    }
-
-    h2 {
-      text-align: center;
-      margin-top: 2rem;
-      color: #7e22ce;
+      background: #f96300;
     }
 
     .result {
-      background: #fef3c7;
+      background: rgba(255, 255, 255, 0.1);
       padding: 1rem;
+      margin-top: 1.5rem;
       border-radius: 12px;
-      margin-bottom: 1.2rem;
-      border-left: 5px solid #f97316;
+      border-left: 5px solid #fe7f2d;
+    }
+
+    .result h3 {
+      margin-top: 0;
     }
 
     .result p {
       margin: 0.4rem 0;
-      font-size: 0.95rem;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Calculadora de Juros e Multa</h1>
+    <h1>Calculadora de Juros por Atraso</h1>
 
     <div id="faturas">
-      <!-- Repetindo os blocos das faturas -->
-      ${[1, 2, 3, 4].map(i => `
-        <div class="fatura">
-          <h3>Fatura ${i}</h3>
-          <label for="valorFatura${i}">Valor (R$):</label>
-          <input type="text" id="valorFatura${i}" placeholder="0,00" oninput="formatarValor(this)">
-          <label for="dataVencimento${i}">Data de Vencimento:</label>
-          <input type="date" id="dataVencimento${i}">
-        </div>
-      `).join('')}
+      <div class="fatura">
+        <h3>Fatura 1</h3>
+        <label for="valorFatura1">Valor (R$):</label>
+        <input type="text" id="valorFatura1" placeholder="0,00" oninput="formatarValor(this)">
+        <label for="dataVencimento1">Data de Vencimento:</label>
+        <input type="date" id="dataVencimento1">
+      </div>
+
+      <div class="fatura">
+        <h3>Fatura 2</h3>
+        <label for="valorFatura2">Valor (R$):</label>
+        <input type="text" id="valorFatura2" placeholder="0,00" oninput="formatarValor(this)">
+        <label for="dataVencimento2">Data de Vencimento:</label>
+        <input type="date" id="dataVencimento2">
+      </div>
+
+      <div class="fatura">
+        <h3>Fatura 3</h3>
+        <label for="valorFatura3">Valor (R$):</label>
+        <input type="text" id="valorFatura3" placeholder="0,00" oninput="formatarValor(this)">
+        <label for="dataVencimento3">Data de Vencimento:</label>
+        <input type="date" id="dataVencimento3">
+      </div>
+
+      <div class="fatura">
+        <h3>Fatura 4</h3>
+        <label for="valorFatura4">Valor (R$):</label>
+        <input type="text" id="valorFatura4" placeholder="0,00" oninput="formatarValor(this)">
+        <label for="dataVencimento4">Data de Vencimento:</label>
+        <input type="date" id="dataVencimento4">
+      </div>
     </div>
 
     <button onclick="calcularJuros()">Calcular</button>
 
-    <h2>Resultados</h2>
+    <h2>Resultados:</h2>
     <div id="resultado"></div>
   </div>
 
