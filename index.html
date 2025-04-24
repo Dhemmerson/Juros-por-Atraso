@@ -1,150 +1,195 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Juros e Multa</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            max-width: 600px;
-            margin: auto;
-            background-image: url('https://i.postimg.cc/HscZL6HM/Design-sem-nome-16.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            color: #ffffff;
-        }
-        h1 {
-            color: #ffffff;
-        }
-        label {
-            display: block;
-            margin: 10px 0 5px;
-            color: #ffffff;
-        }
-        input[type="text"], input[type="date"] {
-            width: 100%;
-            padding: 8px;
-            margin: 5px 0 20px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background-color: rgba(255, 255, 255, 0.8);
-            color: #333;
-            text-align: right;
-        }
-        button {
-            padding: 10px 15px;
-            font-size: 16px;
-            color: #fff;
-            background-color: #d13a21;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #9d2a7d;
-        }
-        .result {
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background-color: rgba(248, 104, 1, 0.8);
-            color: #fff;
-        }
-        .result p {
-            margin: 5px 0;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculadora de Juros e Multa</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), 
+                  url('https://i.postimg.cc/HscZL6HM/Design-sem-nome-16.png') no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 2rem;
+      color: #ffffff;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+
+    h1, h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .fatura {
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    h3 {
+      margin-top: 0;
+      font-weight: 600;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-size: 0.95rem;
+    }
+
+    input[type="text"], input[type="date"] {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: none;
+      border-radius: 8px;
+      background-color: rgba(255, 255, 255, 0.9);
+      color: #333;
+      font-size: 1rem;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.1rem;
+      background: #ff6600;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #cc3e00;
+    }
+
+    .result {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 1rem;
+      margin-top: 1.5rem;
+      border-radius: 12px;
+      border-left: 5px solid #ff6600;
+    }
+
+    .result h3 {
+      margin-top: 0;
+    }
+
+    .result p {
+      margin: 0.4rem 0;
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
     <h1>Calculadora de Juros por Atraso</h1>
 
     <div id="faturas">
-        <div class="fatura">
-            <h3>Fatura 1</h3>
-            <label for="valorFatura1">Valor (R$):</label>
-            <input type="text" id="valorFatura1" placeholder="0,00" oninput="formatarValor(this)">
-            <label for="dataVencimento1">Data de Vencimento:</label>
-            <input type="date" id="dataVencimento1">
-        </div>
+      <div class="fatura">
+        <h3>Fatura 1</h3>
+        <label for="valorFatura1">Valor (R$):</label>
+        <input type="text" id="valorFatura1" placeholder="0,00" oninput="formatarValor(this)">
+        <label for="dataVencimento1">Data de Vencimento:</label>
+        <input type="date" id="dataVencimento1">
+      </div>
 
-        <div class="fatura">
-            <h3>Fatura 2</h3>
-            <label for="valorFatura2">Valor (R$):</label>
-            <input type="text" id="valorFatura2" placeholder="0,00" oninput="formatarValor(this)">
-            <label for="dataVencimento2">Data de Vencimento:</label>
-            <input type="date" id="dataVencimento2">
-        </div>
+      <div class="fatura">
+        <h3>Fatura 2</h3>
+        <label for="valorFatura2">Valor (R$):</label>
+        <input type="text" id="valorFatura2" placeholder="0,00" oninput="formatarValor(this)">
+        <label for="dataVencimento2">Data de Vencimento:</label>
+        <input type="date" id="dataVencimento2">
+      </div>
 
-        <div class="fatura">
-            <h3>Fatura 3</h3>
-            <label for="valorFatura3">Valor (R$):</label>
-            <input type="text" id="valorFatura3" placeholder="0,00" oninput="formatarValor(this)">
-            <label for="dataVencimento3">Data de Vencimento:</label>
-            <input type="date" id="dataVencimento3">
-        </div>
+      <div class="fatura">
+        <h3>Fatura 3</h3>
+        <label for="valorFatura3">Valor (R$):</label>
+        <input type="text" id="valorFatura3" placeholder="0,00" oninput="formatarValor(this)">
+        <label for="dataVencimento3">Data de Vencimento:</label>
+        <input type="date" id="dataVencimento3">
+      </div>
 
-        <div class="fatura">
-            <h3>Fatura 4</h3>
-            <label for="valorFatura4">Valor (R$):</label>
-            <input type="text" id="valorFatura4" placeholder="0,00" oninput="formatarValor(this)">
-            <label for="dataVencimento4">Data de Vencimento:</label>
-            <input type="date" id="dataVencimento4">
-        </div>
+      <div class="fatura">
+        <h3>Fatura 4</h3>
+        <label for="valorFatura4">Valor (R$):</label>
+        <input type="text" id="valorFatura4" placeholder="0,00" oninput="formatarValor(this)">
+        <label for="dataVencimento4">Data de Vencimento:</label>
+        <input type="date" id="dataVencimento4">
+      </div>
     </div>
 
     <button onclick="calcularJuros()">Calcular</button>
 
     <h2>Resultados:</h2>
     <div id="resultado"></div>
+  </div>
 
-    <script>
-        function formatarParaReal(valor) {
-            return valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  <script>
+    function formatarParaReal(valor) {
+      return valor.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+      });
+    }
+
+    function formatarValor(input) {
+      let valor = input.value.replace(/\D/g, "");
+      valor = (valor / 100).toFixed(2) + "";
+      valor = valor.replace(".", ",");
+      valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+      input.value = valor;
+    }
+
+    function calcularJuros() {
+      const taxaJuros = 0.0033;
+      const multaFixa = 0.01;
+      let resultados = "";
+
+      for (let i = 1; i <= 4; i++) {
+        const valorFatura = parseFloat(document.getElementById(`valorFatura${i}`).value.replace(/\./g, '').replace(',', '.'));
+        const dataVencimento = new Date(document.getElementById(`dataVencimento${i}`).value);
+
+        if (!isNaN(valorFatura) && dataVencimento) {
+          const hoje = new Date();
+          const diasAtraso = Math.max(0, Math.ceil((hoje - dataVencimento) / (1000 * 60 * 60 * 24)));
+          const valorMulta = valorFatura * multaFixa;
+          const valorComMulta = valorFatura + valorMulta;
+          const valorJuros = valorComMulta * Math.pow(1 + taxaJuros, diasAtraso) - valorComMulta;
+          const valorTotal = valorComMulta + valorJuros;
+
+          resultados += `
+            <div class="result">
+              <h3>Fatura ${i}</h3>
+              <p>Valor Original: ${formatarParaReal(valorFatura)}</p>
+              <p>Multa: ${formatarParaReal(valorMulta)}</p>
+              <p>Juros: ${formatarParaReal(valorJuros)}</p>
+              <p>Total com Juros e Multa: ${formatarParaReal(valorTotal)}</p>
+            </div>
+          `;
         }
+      }
 
-        function formatarValor(input) {
-            let valor = input.value.replace(/\D/g, "");
-            valor = (valor / 100).toFixed(2) + "";
-            valor = valor.replace(".", ",");
-            valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-            input.value = valor;
-        }
-
-        function calcularJuros() {
-            const taxaJuros = 0.0033; // 0,33% ao dia
-            const multaFixa = 0.01; // 1% de multa
-            let resultados = "";
-
-            for (let i = 1; i <= 4; i++) {
-                const valorFatura = parseFloat(document.getElementById(`valorFatura${i}`).value.replace(/\./g, '').replace(',', '.'));
-                const dataVencimento = new Date(document.getElementById(`dataVencimento${i}`).value);
-
-                if (!isNaN(valorFatura) && dataVencimento) {
-                    const hoje = new Date();
-                    const diasAtraso = Math.max(0, Math.ceil((hoje - dataVencimento) / (1000 * 60 * 60 * 24)));
-                    const valorMulta = valorFatura * multaFixa;
-                    const valorComMulta = valorFatura + valorMulta;
-                    const valorJuros = valorComMulta * Math.pow(1 + taxaJuros, diasAtraso) - valorComMulta;
-                    const valorTotal = valorComMulta + valorJuros;
-
-                    resultados += `
-                        <div class="result">
-                            <h3>Fatura ${i}</h3>
-                            <p>Valor Original: ${formatarParaReal(valorFatura)}</p>
-                            <p>Multa: ${formatarParaReal(valorMulta)}</p>
-                            <p>Juros: ${formatarParaReal(valorJuros)}</p>
-                            <p>Total com Juros e Multa: ${formatarParaReal(valorTotal)}</p>
-                        </div>
-                    `;
-                }
-            }
-
-            document.getElementById("resultado").innerHTML = resultados;
-        }
-    </script>
+      document.getElementById("resultado").innerHTML = resultados;
+    }
+  </script>
 </body>
 </html>
