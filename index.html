@@ -6,20 +6,18 @@
   <title>Calculadora de Juros e Multa</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
-  font-family: 'Inter', sans-serif;
-  background-image: url('https://i.postimg.cc/15j4SGcf/Design-sem-nome-20.png');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  margin: 0;
-  padding: 2rem;
-  color: #ffffff;
-}
+      font-family: 'Inter', sans-serif;
+      background-image: url('https://i.postimg.cc/15j4SGcf/Design-sem-nome-20.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      margin: 0;
+      padding: 2rem;
+      color: #ffffff;
+    }
 
     .container {
       max-width: 750px;
@@ -141,6 +139,17 @@
       </div>
     </div>
 
+    <!-- Opção de Agendamento -->
+    <div style="margin-top: 20px;">
+      <label>
+        <input type="checkbox" id="pagamentoAgendado" onchange="mostrarCampoAgendamento()"> Pagamento com Agendamento?
+      </label>
+      <div id="campoAgendamento" style="display: none; margin-top: 10px;">
+        <label for="dataAgendada">Data do Pagamento:</label>
+        <input type="date" id="dataAgendada">
+      </div>
+    </div>
+
     <button onclick="calcularJuros()">Calcular</button>
 
     <h2>Resultados:</h2>
@@ -163,18 +172,31 @@
       input.value = valor;
     }
 
+    function mostrarCampoAgendamento() {
+      const checkbox = document.getElementById('pagamentoAgendado');
+      const campo = document.getElementById('campoAgendamento');
+      campo.style.display = checkbox.checked ? 'block' : 'none';
+    }
+
     function calcularJuros() {
       const taxaJuros = 0.0033;
-      const multaFixa = 0.01;
+      const multaFixa = 0.02;
       let resultados = "";
 
-      for (let i = 1; i <= 4; i++) {
-        const valorFatura = parseFloat(document.getElementById(`valorFatura${i}`).value.replace(/\./g, '').replace(',', '.'));
-        const dataVencimento = new Date(document.getElementById(`dataVencimento${i}`).value);
+      const pagamentoAgendado = document.getElementById('pagamentoAgendado').checked;
+      const dataReferencia = pagamentoAgendado && document.getElementById('dataAgendada').value
+        ? new Date(document.getElementById('dataAgendada').value)
+        : new Date();
 
-        if (!isNaN(valorFatura) && dataVencimento) {
-          const hoje = new Date();
-          const diasAtraso = Math.max(0, Math.ceil((hoje - dataVencimento) / (1000 * 60 * 60 * 24)));
+      for (let i = 1; i <= 4; i++) {
+        const valorInput = document.getElementById(`valorFatura${i}`).value;
+        const dataVenc = document.getElementById(`dataVencimento${i}`).value;
+
+        if (valorInput && dataVenc) {
+          const valorFatura = parseFloat(valorInput.replace(/\./g, '').replace(',', '.'));
+          const dataVencimento = new Date(dataVenc);
+
+          const diasAtraso = Math.max(0, Math.ceil((dataReferencia - dataVencimento) / (1000 * 60 * 60 * 24)));
           const valorMulta = valorFatura * multaFixa;
           const valorComMulta = valorFatura + valorMulta;
           const valorJuros = valorComMulta * Math.pow(1 + taxaJuros, diasAtraso) - valorComMulta;
@@ -191,6 +213,12 @@
           `;
         }
       }
+
+      document.getElementById("resultado").innerHTML = resultados;
+    }
+  </script>
+</body>
+</html>
 
       document.getElementById("resultado").innerHTML = resultados;
     }
