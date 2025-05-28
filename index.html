@@ -79,6 +79,7 @@
       cursor: pointer;
       transition: background 0.3s;
       font-weight: bold;
+      margin-top: 1rem;
     }
 
     button:hover {
@@ -100,11 +101,33 @@
     .result p {
       margin: 0.4rem 0;
     }
+
+    /* Logo só aparece na impressão dentro do resultado */
+    #logo-impressao {
+      display: none;
+      max-width: 150px;
+      margin-bottom: 1rem;
+    }
+
+    @media print {
+      #logo-impressao {
+        display: block !important;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Calculadora de Juros por Atraso</h1>
+
+    <!-- Novos campos para Nome Completo e CPF/CNPJ -->
+    <div class="fatura">
+      <label for="nomeCompleto">Nome Completo:</label>
+      <input type="text" id="nomeCompleto" placeholder="Digite o nome completo do cliente">
+
+      <label for="cpfCnpj">CPF / CNPJ:</label>
+      <input type="text" id="cpfCnpj" placeholder="Digite o CPF/CNPJ do cliente">
+    </div>
 
     <div id="faturas">
       <div class="fatura">
@@ -155,6 +178,7 @@
 
     <h2>Resultados:</h2>
     <div id="resultado"></div>
+	<button onclick="imprimirResultado()">Imprimir Resultado</button>
   </div>
 
   <script>
@@ -179,45 +203,143 @@
       campo.style.display = checkbox.checked ? 'block' : 'none';
     }
 
+    function formatarDataBR(dataStr) {
+      if(!dataStr) return "";
+      const partes = dataStr.split("-");
+      if(partes.length !== 3) return dataStr;
+      return `${partes[2]}/${partes[1]}/${partes[0]}`;
+    }
+
     function calcularJuros() {
       const taxaJuros = 0.0033;
       const multaFixa = 0.02;
-      let resultados = "";
+      const nomeCompleto = document.getElementById('nomeCompleto').value.trim();
+      const cpfCnpj = document.getElementById('cpfCnpj').value.trim();
+
+      let resultados = `<img id="logo-impressao" src="https://i.postimg.cc/jd2NLTmh/C-4.png" alt="Logo Impressão">`;
+
+      // Mostrar nome e cpf/cnpj no resultado
+      if(nomeCompleto) resultados += `<p><strong>Nome Completo:</strong> ${nomeCompleto}</p>`;
+      if(cpfCnpj) resultados += `<p><strong>CPF / CNPJ:</strong> ${cpfCnpj}</p>`;
 
       const pagamentoAgendado = document.getElementById('pagamentoAgendado').checked;
-      const dataReferencia = pagamentoAgendado && document.getElementById('dataAgendada').value
-        ? new Date(document.getElementById('dataAgendada').value)
+      const dataAgendadaStr = document.getElementById('dataAgendada').value;
+      const dataReferencia = pagamentoAgendado && dataAgendadaStr
+        ? new Date(dataAgendadaStr)
         : new Date();
 
-      for (let i = 1; i <= 4; i++) {
-        const valorInput = document.getElementById(`valorFatura${i}`).value;
-        const dataVenc = document.getElementById(`dataVencimento${i}`).value;
-
-        if (valorInput && dataVenc) {
-          const valorFatura = parseFloat(valorInput.replace(/\./g, '').replace(',', '.'));
-          const dataVencimento = new Date(dataVenc);
-
-          const diasAtraso = Math.max(0, Math.ceil((dataReferencia - dataVencimento) / (1000 * 60 * 60 * 24)));
-          const valorMulta = valorFatura * multaFixa;
-          const valorComMulta = valorFatura + valorMulta;
-          const valorJuros = valorComMulta * Math.pow(1 + taxaJuros, diasAtraso) - valorComMulta;
-          const valorTotal = valorComMulta + valorJuros;
-
-          resultados += `
-            <div class="result">
-              <h3>Fatura ${i}</h3>
-              <p>Valor Original: ${formatarParaReal(valorFatura)}</p>
-              <p>Multa: ${formatarParaReal(valorMulta)}</p>
-              <p>Juros: ${formatarParaReal(valorJuros)}</p>
-              <p>Total com Juros e Multa: ${formatarParaReal(valorTotal)}</p>
-            </div>
-          `;
-        }
+      if (pagamentoAgendado && dataAgendadaStr) {
+        resultados += `<p><strong>Data de Pagamento Agendado:</strong> ${formatarDataBR(dataAgendadaStr)}</p>`;
+      } else {
+        resultados += `<p><strong>Data de Pagamento (hoje):</strong> ${formatarDataBR(dataReferencia.toISOString().slice(0,10))}</p>`;
       }
 
-      document.getElementById("resultado").innerHTML = resultados;
+      let somaTotalComJuros = 0;
+
+      for(let i=1; i<=4; i++) {
+  const valorInput = document.getElementById(`valorFatura${i}`).value.replace(/\./g, "").replace(",", ".");
+  const dataVencInput = document.getElementById(`dataVencimento${i}`).value;
+
+  if(!valorInput || !dataVencInput) continue;
+
+  const valorFatura = parseFloat(valorInput);
+  if(isNaN(valorFatura)) continue;
+
+  const dataVencimento = new Date(dataVencInput);
+  let diasAtraso = Math.floor((dataReferencia - dataVencimento) / (1000 * 60 * 60 * 24));
+  if(diasAtraso < 0) diasAtraso = 0;
+
+  let multa = 0;
+  let juros = 0;
+  let valorComJuros = valorFatura;
+
+  if(diasAtraso > 0){
+    multa = valorFatura * multaFixa;
+    const valorComMulta = valorFatura + multa;
+
+    // juros compostos sobre valor já com multa
+    valorComJuros = valorComMulta * Math.pow(1 + taxaJuros, diasAtraso);
+
+    juros = valorComJuros - valorComMulta;
+  }
+
+  somaTotalComJuros += valorComJuros;
+
+  resultados += `
+    <div class="result">
+      <h3>Fatura ${i}</h3>
+      <p><strong>Valor original:</strong> ${formatarParaReal(valorFatura)}</p>
+      <p><strong>Data de vencimento:</strong> ${formatarDataBR(dataVencInput)}</p>
+      <p><strong>Dias em atraso:</strong> ${diasAtraso}</p>
+      <p><strong>Multa:</strong> ${formatarParaReal(multa)}</p>
+      <p><strong>Juros:</strong> ${formatarParaReal(juros)}</p>
+      <p><strong>Valor total com multa e juros:</strong> ${formatarParaReal(valorComJuros)}</p>
+    </div>
+  `;
+}
+
+      resultados += `<h3>Total a pagar (com juros e multa): ${formatarParaReal(somaTotalComJuros)}</h3>`;
+
+      document.getElementById('resultado').innerHTML = resultados;
+    }
+
+    let janelaImpressao = null;
+
+    function imprimirResultado() {
+      const conteudo = document.getElementById('resultado').innerHTML;
+      if (!conteudo) {
+        alert('Faça o cálculo antes de imprimir.');
+        return;
+      }
+
+      if(janelaImpressao && !janelaImpressao.closed){
+        janelaImpressao.focus();
+        return; // Já tem janela aberta, não abrir outra
+      }
+
+      janelaImpressao = window.open('', '', 'width=800,height=600');
+      janelaImpressao.document.write(`
+        <html>
+          <head>
+            <title>Impressão - Resultado</title>
+            <style>
+              body {
+                font-family: 'Inter', sans-serif;
+                background: #5e17eb;
+                color: white;
+                padding: 20px;
+              }
+              #logo-impressao {
+                max-width: 150px;
+                margin-bottom: 1rem;
+                display: block;
+              }
+              .result {
+                background: #4b0eb1;
+                border-left: 5px solid #fe7f2d;
+                padding: 15px;
+                margin-bottom: 15px;
+                border-radius: 12px;
+              }
+              h3 {
+                margin-top: 0;
+              }
+            </style>
+          </head>
+          <body>
+            ${conteudo}
+          </body>
+        </html>
+      `);
+
+      janelaImpressao.document.close();
+
+      // Só imprimir quando a janela estiver carregada
+      janelaImpressao.onload = function () {
+        janelaImpressao.focus();
+        janelaImpressao.print();
+      };
     }
   </script>
 </body>
 </html>
-
